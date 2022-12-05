@@ -1,1 +1,1 @@
-choco install -y adobereader python dotnet-sdk microsoft-teams vlc office365business 7zip teamviewer putty vscode gimp wireshark azure-cli docker-desktop signal vnc-viewer openscad jabra-direct wsl2 steam-client insomnia-rest-api-client logitech-webcam-software
+choco install -y adobereader python dotnet-sdk microsoft-teams vlc 7zip teamviewer putty vscode gimp wireshark azure-cli docker-desktop signal vnc-viewer openscad jabra-direct insomnia-rest-api-client git
