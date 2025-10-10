@@ -1,1 +1,1 @@
-choco install -y adobereader python dotnet-sdk microsoft-teams vlc 7zip teamviewer putty vscode gimp wireshark azure-cli docker-desktop signal vnc-viewer openscad jabra-direct insomnia-rest-api-client git
+choco install -y adobereader python dotnet-sdk vlc 7zip vscode gimp wireshark azure-cli docker-desktop signal vnc-viewer openscad jabra-direct git 1password nanoleaf streamdeck steam
