@@ -27,14 +27,15 @@ function Get-DirectReportsRecursive {
         [string]$ManagerName
     )
 
-    # Graph API endpoint for direct reports. Explicitly selecting properties speeds up the query.
+    # Graph API endpoint for direct reports. 
+    # The backtick (`) before $select is required so PowerShell does not interpret it as a local variable.
     $uri = "https://graph.microsoft.com/v1.0/users/$UserPrincipalName/directReports?`$select=id,displayName,mail,jobTitle"
 
     while ($uri) {
         try {
             $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
         } catch {
-            Write-Error "Failed to query direct reports for $UserPrincipalName. Ensure the token has User.Read.All permissions."
+            Write-Warning "Failed to query direct reports for $UserPrincipalName. Ensure permissions are correct."
             break
         }
 
@@ -59,10 +60,20 @@ function Get-DirectReportsRecursive {
 
 # 1. Retrieve the starting user's display name to assign as the first manager
 try {
-    $startUserUri = "https://graph.microsoft.com/v1.0/users/$EmailAddress?`$select=displayName"
+    # Requesting the default user object to avoid $select parsing errors
+    $startUserUri = "https://graph.microsoft.com/v1.0/users/$EmailAddress"
     $startUser = Invoke-RestMethod -Uri $startUserUri -Headers $headers -Method Get
+    
+    # Extract the display name from the returned object
     $startManagerName = $startUser.displayName
 } catch {
+    Write-Host "--- HTTP ERROR DETAILS ---" -ForegroundColor Red
+    Write-Host "Message: $($_.Exception.Message)" -ForegroundColor Red
+    if ($_.ErrorDetails) {
+        Write-Host "Graph API Response: $($_.ErrorDetails.Message)" -ForegroundColor Red
+    }
+    Write-Host "--------------------------" -ForegroundColor Red
+    
     Write-Error "Failed to retrieve the starting user '$EmailAddress'. Script terminating."
     exit
 }
